@@ -8,5 +8,7 @@ namespace ExtractData.Domain.Interfaces
     public interface IMySql
     {
         List<ShowDatabase> ShowDatabase();
+
+        
     }
 }

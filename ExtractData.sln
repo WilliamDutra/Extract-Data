@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractData.Entities", "Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractData.Domain", "ExtractData.Domain\ExtractData.Domain.csproj", "{4D0DBAD9-61A0-4F95-AAA5-C5F034D1EC66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractData", "ExtractData\ExtractData.csproj", "{B296BE6A-E7BE-456C-BB1A-472223E1F797}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractData.UI", "ExtractData\ExtractData.UI.csproj", "{B296BE6A-E7BE-456C-BB1A-472223E1F797}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

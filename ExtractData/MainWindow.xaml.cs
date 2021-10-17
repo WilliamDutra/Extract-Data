@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ExtractData.Domain.Services;
+using ExtractData.UI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,10 @@ namespace ExtractData
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
+            //var str = "";
+            //MysqlServerService mysql = new MysqlServerService(str);
+            //var a = mysql.ShowDatabase();
         }
     }
 }
