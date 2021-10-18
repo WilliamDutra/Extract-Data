@@ -26,7 +26,7 @@ namespace ExtractData
         {
             InitializeComponent();
             DataContext = new MainWindowViewModel();
-            //var str = "";
+            //var str = "Server=remotemysql.com; Port=3306; Database=bKoqdp3zTk; Uid=bKoqdp3zTk; Pwd=2eEgJGdJrj;";
             //MysqlServerService mysql = new MysqlServerService(str);
             //var a = mysql.ShowDatabase();
         }

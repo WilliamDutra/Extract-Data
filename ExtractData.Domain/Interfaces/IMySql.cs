@@ -9,6 +9,7 @@ namespace ExtractData.Domain.Interfaces
     {
         List<ShowDatabase> ShowDatabase();
 
+        List<ShowTable> ShowTable(string Database);
         
     }
 }

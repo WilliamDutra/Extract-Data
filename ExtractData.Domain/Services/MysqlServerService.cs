@@ -23,7 +23,7 @@ namespace ExtractData.Domain.Services
             {
                 var Sql = new SQL();
                 var Connection  = Sql.CreateMySqlServerConnection(_StrConnection);
-                var Command = Sql.CreateMySqlServerCommand(MysqlServer.ShowDatabases, CommandType.Text);
+                var Command = Sql.CreateMySqlServerCommand(MySqlServer.ShowDatabases, CommandType.Text);
 
                 return Sql.ExecuteMySqlServerCommandList<ShowDatabase>(Connection, Command);
                 
@@ -35,7 +35,22 @@ namespace ExtractData.Domain.Services
             }
         }
 
+        public List<ShowTable> ShowTable(string Database)
+        {
+            try
+            {
+                var Sql = new SQL();
+                var Connection = Sql.CreateMySqlServerConnection(_StrConnection);
+                var Command = Sql.CreateMySqlServerCommand(MySqlServer.ShowTables + $"'{Database}';", CommandType.Text);
 
+                return Sql.ExecuteMySqlServerCommandList<ShowTable>(Connection, Command);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
     }
 }

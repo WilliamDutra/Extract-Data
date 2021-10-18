@@ -6,6 +6,6 @@ namespace ExtractData.Entities.ValueObjects.MySqlServer
 {
     public class ShowTable
     {
-        public int MyProperty { get; set; }
+        public string Table { get; set; }
     }
 }

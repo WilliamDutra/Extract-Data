@@ -9,11 +9,25 @@ namespace ExtractData.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private ShowDatabase _DatabaseSelected;
+
+        public ShowDatabase DatabaseSelected 
+        {
+            get { return _DatabaseSelected; } set { SetProperty(ref _DatabaseSelected, value); Tables = LoadTables(); } 
+        }
+
         private ObservableCollection<ShowDatabase> _Databases;
 
         public ObservableCollection<ShowDatabase> Databases 
         {
             get { return _Databases; } set { SetProperty(ref _Databases, value); }
+        }
+
+        private ObservableCollection<ShowTable> _Tables;
+
+        public ObservableCollection<ShowTable> Tables 
+        {
+            get { return _Tables; } set { SetProperty(ref _Tables, value); } 
         }
 
         private string _Provider;
@@ -44,6 +58,21 @@ namespace ExtractData.UI.ViewModels
             }
 
             return databases;
+        }
+
+        private ObservableCollection<ShowTable> LoadTables()
+        {
+            MysqlServerService mysql = new MysqlServerService(ConnectionString);
+            var data = mysql.ShowTable(DatabaseSelected.Database);
+
+            var tables = new ObservableCollection<ShowTable>();
+
+            foreach (var table in data)
+            {
+                tables.Add(table);
+            }
+
+            return tables;
         }
 
     }
