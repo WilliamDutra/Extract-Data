@@ -1,5 +1,6 @@
 ﻿using ExtractData.Domain.Services;
 using ExtractData.Entities.ValueObjects.MySqlServer;
+using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,11 +10,21 @@ namespace ExtractData.UI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+
+        public Command ExtrairCommand { get; set; }
+
         private ShowDatabase _DatabaseSelected;
 
         public ShowDatabase DatabaseSelected 
         {
             get { return _DatabaseSelected; } set { SetProperty(ref _DatabaseSelected, value); Tables = LoadTables(); } 
+        }
+
+        private ShowTable _TableSelected;
+
+        public ShowTable TableSelected 
+        {
+            get { return _TableSelected; } set { SetProperty(ref _TableSelected, value); }
         }
 
         private ObservableCollection<ShowDatabase> _Databases;
@@ -45,6 +56,11 @@ namespace ExtractData.UI.ViewModels
             get { return _ConnectionString; } set { SetProperty(ref _ConnectionString, value);  } 
         }
 
+        public MainWindowViewModel()
+        {
+            ExtrairCommand = new Command(() => LoadColumnsInTable(DatabaseSelected.Database, TableSelected.Table));
+        }
+
         private ObservableCollection<ShowDatabase> LoadDatabases()
         {
             MysqlServerService mysql = new MysqlServerService(ConnectionString);
@@ -73,6 +89,13 @@ namespace ExtractData.UI.ViewModels
             }
 
             return tables;
+        }
+
+        private void LoadColumnsInTable(string Database, string Table)
+        {
+            MysqlServerService mysql = new MysqlServerService(ConnectionString);
+            var data = mysql.ShowColumn(Database, Table);
+            var scripts = mysql.GenerateScriptsSql(data, Database, Table);
         }
 
     }

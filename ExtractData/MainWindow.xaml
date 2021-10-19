@@ -40,7 +40,23 @@
             </StackPanel>
             <StackPanel Margin="0,10,0,10">
                 <Label>Tables</Label>
-                <ComboBox ItemsSource="{ Binding Tables }" DisplayMemberPath="Table" />
+                <ComboBox ItemsSource="{ Binding Tables }" DisplayMemberPath="Table" SelectedItem="{ Binding TableSelected }" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" VerticalAlignment="Center">
+            <StackPanel>
+                <GroupBox Header="Exportação de dados">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+                        <Label>Texto</Label>
+                        <CheckBox />
+                        <Label>Excel</Label>
+                        <CheckBox />
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+            <StackPanel Margin="10">
+                <Button Width="280" Command="{ Binding ExtrairCommand }">Gerar</Button>
             </StackPanel>
         </StackPanel>
         

@@ -130,5 +130,19 @@ namespace ExtractData.Domain
             }
         }
 
+        public IDataReader ExecuteMySqlServerCommand(MySqlConnection SqlConnection, MySqlCommand Command)
+        {
+            try
+            {
+                var retorno = SqlConnection.ExecuteReader(Command.CommandText, commandType: Command.CommandType);
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }
