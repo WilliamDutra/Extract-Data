@@ -49,9 +49,9 @@
                 <GroupBox Header="Exportação de dados">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
                         <Label>Texto</Label>
-                        <CheckBox />
+                        <CheckBox IsChecked="{ Binding IsTexto }" />
                         <Label>Excel</Label>
-                        <CheckBox />
+                        <CheckBox IsChecked="{ Binding IsExcel }" />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

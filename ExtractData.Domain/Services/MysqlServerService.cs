@@ -11,22 +11,38 @@ namespace ExtractData.Domain.Services
 {
     public class MysqlServerService : IMySql
     {
-        private string _StrConnection;
+        
+        private string StrConnection;
 
-        public MysqlServerService(string StrConnection)
+        private ISQL _SQL;
+
+        public MysqlServerService(ISQL SQL)
         {
-            _StrConnection = StrConnection;
+            _SQL = SQL;
         }
 
+        /// <summary>
+        /// Seleciona a string de conexão
+        /// </summary>
+        /// <param name="StrConn">String de conexão</param>
+        public void SetConnectionStrings(string StrConn)
+        {
+            StrConnection = StrConn;
+        }
+
+        /// <summary>
+        /// Método que retorna as colunas da tabela selecionada
+        /// </summary>
+        /// <param name="Database">Banco selecionado</param>
+        /// <param name="Table">Tabela selecionada</param>
+        /// <returns>Retorna uma lista com as colunas da tabela selecionada</returns>
         public List<ShowColumn> ShowColumn(string Database, string Table)
         {
             try
             {
-                var Sql = new SQL();
-                var Connection = Sql.CreateMySqlServerConnection(_StrConnection);
-                var Command = Sql.CreateMySqlServerCommand(string.Format(MySqlServer.ShowColumns, Table, Database), CommandType.Text);
-
-                return Sql.ExecuteMySqlServerCommandList<ShowColumn>(Connection, Command);
+                var Connection = _SQL.CreateMySqlServerConnection(StrConnection);
+                var Command = _SQL.CreateMySqlServerCommand(string.Format(MySqlServer.ShowColumns, Table, Database), CommandType.Text);
+                return _SQL.ExecuteMySqlServerCommandList<ShowColumn>(Connection, Command);
             }
             catch (Exception)
             {
@@ -35,16 +51,17 @@ namespace ExtractData.Domain.Services
             }
         }
 
+        /// <summary>
+        /// Método que retorna os bancos criados na string de conexão enviada
+        /// </summary>
+        /// <returns>Retorna uma lista com todas as bases dentro da string de conexão</returns>
         public List<ShowDatabase> ShowDatabase()
         {
             try
             {
-                var Sql = new SQL();
-                var Connection = Sql.CreateMySqlServerConnection(_StrConnection);
-                var Command = Sql.CreateMySqlServerCommand(MySqlServer.ShowDatabases, CommandType.Text);
-
-                return Sql.ExecuteMySqlServerCommandList<ShowDatabase>(Connection, Command);
-
+                var Connection = _SQL.CreateMySqlServerConnection(StrConnection);
+                var Command = _SQL.CreateMySqlServerCommand(MySqlServer.ShowDatabases, CommandType.Text);
+                return _SQL.ExecuteMySqlServerCommandList<ShowDatabase>(Connection, Command);
             }
             catch (Exception ex)
             {
@@ -53,14 +70,18 @@ namespace ExtractData.Domain.Services
             }
         }
 
+        /// <summary>
+        /// Método que retora as tabelas do banco selecionado
+        /// </summary>
+        /// <param name="Database">Banco selecionado</param>
+        /// <returns>Retorna uma lista com as tabelas do banco selecionado</returns>
         public List<ShowTable> ShowTable(string Database)
         {
             try
             {
-                var Sql = new SQL();
-                var Connection = Sql.CreateMySqlServerConnection(_StrConnection);
-                var Command = Sql.CreateMySqlServerCommand(string.Format(MySqlServer.ShowTables, Database), CommandType.Text);
-                return Sql.ExecuteMySqlServerCommandList<ShowTable>(Connection, Command);
+                var Connection = _SQL.CreateMySqlServerConnection(StrConnection);
+                var Command = _SQL.CreateMySqlServerCommand(string.Format(MySqlServer.ShowTables, Database), CommandType.Text);
+                return _SQL.ExecuteMySqlServerCommandList<ShowTable>(Connection, Command);
             }
             catch (Exception)
             {
@@ -69,6 +90,13 @@ namespace ExtractData.Domain.Services
             }
         }
 
+        /// <summary>
+        /// Método que gera os inserts da tabela selecionada
+        /// </summary>
+        /// <param name="columns">Colunas da tabela selecionada</param>
+        /// <param name="Database">Banco selecionado</param>
+        /// <param name="Table">Tabela selecionada</param>
+        /// <returns>Retorna os scripts de INSERT com os dados da tabela selcionada</returns>
         public string GenerateScriptsSql(List<ShowColumn> columns, string Database, string Table)
         {
             string sql = "SELECT ";
@@ -103,12 +131,16 @@ namespace ExtractData.Domain.Services
             return insert;
         }
 
+        /// <summary>
+        /// Método que executa os comandos SQL dentro do servidor
+        /// </summary>
+        /// <param name="Query">Query SQL</param>
+        /// <returns>Retorna um DataReader com o resultado da query</returns>
         public IDataReader ExecuteQuery(string Query)
         {
-            var Sql = new SQL();
-            var Connection = Sql.CreateMySqlServerConnection(_StrConnection);
-            var Command = Sql.CreateMySqlServerCommand(Query, CommandType.Text);
-            var Reader = Sql.ExecuteMySqlServerCommand(Connection, Command);
+            var Connection = _SQL.CreateMySqlServerConnection(StrConnection);
+            var Command = _SQL.CreateMySqlServerCommand(Query, CommandType.Text);
+            var Reader = _SQL.ExecuteMySqlServerCommand(Connection, Command);
             return Reader;
         }
 

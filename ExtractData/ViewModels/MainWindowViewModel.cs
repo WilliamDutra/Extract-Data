@@ -1,5 +1,8 @@
-﻿using ExtractData.Domain.Services;
+﻿using ExtractData.Domain.Interfaces;
+using ExtractData.Domain.Services;
 using ExtractData.Entities.ValueObjects.MySqlServer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using MvvmHelpers.Commands;
 using System;
 using System.Collections.Generic;
@@ -56,17 +59,38 @@ namespace ExtractData.UI.ViewModels
             get { return _ConnectionString; } set { SetProperty(ref _ConnectionString, value);  } 
         }
 
+        private bool _IsTexto;
+
+        public bool IsTexto 
+        {
+            get { return _IsTexto; } set { SetProperty(ref _IsTexto, value); } 
+        }
+
+        private bool _IsExcel;
+
+        public bool IsExcel 
+        {
+            get { return _IsExcel; } set { SetProperty(ref _IsExcel, value); } 
+        }
+
+        private IMySql _MySql;
+
         public MainWindowViewModel()
         {
-            ExtrairCommand = new Command(() => LoadColumnsInTable(DatabaseSelected.Database, TableSelected.Table));
+            ExtrairCommand = new Command(() => GenerateSQLTextScripts(DatabaseSelected.Database, TableSelected.Table));
+        }
+
+        public MainWindowViewModel(IMySql MySql)
+        {
+            _MySql = MySql;
         }
 
         private ObservableCollection<ShowDatabase> LoadDatabases()
         {
-            MysqlServerService mysql = new MysqlServerService(ConnectionString);
-            var data = mysql.ShowDatabase();
-
             var databases = new ObservableCollection<ShowDatabase>();
+
+            _MySql.SetConnectionStrings(ConnectionString);
+            var data = _MySql.ShowDatabase();
 
             foreach (var database in data)
             {
@@ -78,9 +102,7 @@ namespace ExtractData.UI.ViewModels
 
         private ObservableCollection<ShowTable> LoadTables()
         {
-            MysqlServerService mysql = new MysqlServerService(ConnectionString);
-            var data = mysql.ShowTable(DatabaseSelected.Database);
-
+            var data = _MySql.ShowTable(DatabaseSelected.Database);
             var tables = new ObservableCollection<ShowTable>();
 
             foreach (var table in data)
@@ -91,11 +113,20 @@ namespace ExtractData.UI.ViewModels
             return tables;
         }
 
-        private void LoadColumnsInTable(string Database, string Table)
+        private void GenerateSQLTextScripts(string Database, string Table)
         {
-            MysqlServerService mysql = new MysqlServerService(ConnectionString);
-            var data = mysql.ShowColumn(Database, Table);
-            var scripts = mysql.GenerateScriptsSql(data, Database, Table);
+            
+            if (IsTexto)
+            {
+                var data = _MySql.ShowColumn(Database, Table);
+                var ScriptSQL = _MySql.GenerateScriptsSql(data, Database, Table);
+
+                var saveFileDialog = new SaveFileDialog();
+                saveFileDialog.ShowDialog();
+                var caminho = saveFileDialog.FileName;
+                
+
+            }
         }
 
     }

@@ -9,6 +9,8 @@ namespace ExtractData.Domain.Interfaces
 {
     public interface IMySql
     {
+        void SetConnectionStrings(string StrConnection);
+
         List<ShowDatabase> ShowDatabase();
 
         List<ShowTable> ShowTable(string Database);

@@ -1,5 +1,8 @@
-﻿using ExtractData.Domain.Services;
+﻿using ExtractData.Domain.Interfaces;
+using ExtractData.Domain.Services;
+using ExtractData.UI;
 using ExtractData.UI.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +28,13 @@ namespace ExtractData
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
-            //var str = "Server=remotemysql.com; Port=3306; Database=bKoqdp3zTk; Uid=bKoqdp3zTk; Pwd=2eEgJGdJrj;";
-            //MysqlServerService mysql = new MysqlServerService(str);
-            //var a = mysql.ShowDatabase();
+
+            var serviceCollection = new ServiceCollection();
+            Startup.Register(serviceCollection);
+            var Mysql = Startup.Container.GetService<IMySql>();
+
+            DataContext = new MainWindowViewModel(Mysql);
+            
         }
     }
 }
