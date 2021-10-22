@@ -18,6 +18,7 @@ namespace ExtractData.UI
 
             service.AddScoped<ISQL, SQL>();
             service.AddScoped<IMySql, MysqlServerService>();
+            service.AddScoped<ISqlServer, SqlServerService>();
             
             Container = service.BuildServiceProvider();
 

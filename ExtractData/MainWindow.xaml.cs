@@ -32,8 +32,9 @@ namespace ExtractData
             var serviceCollection = new ServiceCollection();
             Startup.Register(serviceCollection);
             var Mysql = Startup.Container.GetService<IMySql>();
+            var SqlServer = Startup.Container.GetService<ISqlServer>();
 
-            DataContext = new MainWindowViewModel(Mysql);
+            DataContext = new MainWindowViewModel(Mysql, SqlServer);
             
         }
     }

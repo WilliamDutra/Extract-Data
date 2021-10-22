@@ -22,8 +22,15 @@ namespace ExtractData.UI.ViewModels
 
         public ShowDatabase DatabaseSelected
         {
-            get { return _DatabaseSelected; }
-            set { SetProperty(ref _DatabaseSelected, value); Tables = LoadTables(); }
+            get 
+            { 
+                return _DatabaseSelected; 
+            }
+            set 
+            { 
+                SetProperty(ref _DatabaseSelected, value); 
+                Tables = LoadTables(); 
+            }
         }
 
         private ShowTable _TableSelected;
@@ -54,8 +61,15 @@ namespace ExtractData.UI.ViewModels
 
         public string Provider
         {
-            get { return _Provider; }
-            set { SetProperty(ref _Provider, value); Databases = LoadDatabases(); }
+            get 
+            { 
+                return _Provider; 
+            }
+            set 
+            { 
+                SetProperty(ref _Provider, value); 
+                Databases = LoadDatabase(); 
+            }
         }
 
         private string _ConnectionString;
@@ -84,19 +98,38 @@ namespace ExtractData.UI.ViewModels
 
         private IMySql _MySql;
 
+        private ISqlServer _SqlServer;
+
         public MainWindowViewModel()
         {
             
         }
 
-        public MainWindowViewModel(IMySql MySql)
+        public MainWindowViewModel(IMySql MySql, ISqlServer SqlServer)
         {
             _MySql = MySql;
+            _SqlServer = SqlServer;
             ExtrairCommand = new Command(() => GenerateSQLTextScripts(DatabaseSelected.Database, TableSelected.Table));
         }
 
-        private ObservableCollection<ShowDatabase> LoadDatabases()
+        private ObservableCollection<ShowDatabase> LoadSqlServerDatabases()
         {
+            var databases = new ObservableCollection<ShowDatabase>();
+
+            _SqlServer.SetConnectionStrings(ConnectionString);
+            var data = _SqlServer.ShowDatabase();
+
+            foreach (var database in data)
+            {
+                databases.Add(database);
+            }
+
+            return databases;
+        }
+
+        private ObservableCollection<ShowDatabase> LoadMySqlDatabases()
+        {
+          
             var databases = new ObservableCollection<ShowDatabase>();
 
             _MySql.SetConnectionStrings(ConnectionString);
@@ -110,9 +143,22 @@ namespace ExtractData.UI.ViewModels
             return databases;
         }
 
-        private ObservableCollection<ShowTable> LoadTables()
+        private ObservableCollection<ShowTable> LoadMySqlTables()
         {
             var data = _MySql.ShowTable(DatabaseSelected.Database);
+            var tables = new ObservableCollection<ShowTable>();
+
+            foreach (var table in data)
+            {
+                tables.Add(table);
+            }
+
+            return tables;
+        }
+
+        private ObservableCollection<ShowTable> LoadSqlServerTables()
+        {
+            var data = _SqlServer.ShowTable(DatabaseSelected.Database);
             var tables = new ObservableCollection<ShowTable>();
 
             foreach (var table in data)
@@ -138,6 +184,30 @@ namespace ExtractData.UI.ViewModels
                 MessageBox.Show("Arquivo salvo com sucesso!");
             }
         }
+
+        private ObservableCollection<ShowDatabase> LoadDatabase()
+        {
+            if (Provider.Contains("MYSQL"))
+                return LoadMySqlDatabases();
+
+            if (Provider.Contains("SQLSERVER"))
+                return LoadSqlServerDatabases();
+
+            return LoadSqlServerDatabases();
+        }
+
+
+        private ObservableCollection<ShowTable> LoadTables()
+        {
+            if (Provider.Contains("MYSQL"))
+                return LoadMySqlTables();
+
+            if (Provider.Contains("SQLSERVER"))
+                return LoadSqlServerTables();
+
+            return LoadSqlServerTables();
+        }
+
 
     }
 }
