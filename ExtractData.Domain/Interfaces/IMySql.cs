@@ -1,4 +1,4 @@
-﻿using ExtractData.Entities.ValueObjects.MySqlServer;
+﻿using ExtractData.Entities.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Data;

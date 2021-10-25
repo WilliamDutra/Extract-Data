@@ -1,6 +1,6 @@
 ﻿using ExtractData.Domain.Interfaces;
 using ExtractData.Domain.Services;
-using ExtractData.Entities.ValueObjects.MySqlServer;
+using ExtractData.Entities.ValueObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using MvvmHelpers.Commands;

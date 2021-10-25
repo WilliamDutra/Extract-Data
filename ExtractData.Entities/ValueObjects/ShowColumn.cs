@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExtractData.Entities.ValueObjects.MySqlServer
+namespace ExtractData.Entities.ValueObjects
 {
     public class ShowColumn
     {
