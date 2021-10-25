@@ -24,11 +24,7 @@
             </StackPanel>
             <StackPanel>
                 <Label>Provider</Label>
-                <ComboBox SelectedItem="{ Binding Provider }" SelectedValue="Content">
-                    <ComboBoxItem Name="MYSQL">MYSQL</ComboBoxItem>
-                    <ComboBoxItem Name="SQLSERVER">SQLSERVER</ComboBoxItem>
-                    <ComboBoxItem Name="ORACLE">ORACLE</ComboBoxItem>
-                </ComboBox>
+                <ComboBox ItemsSource="{ Binding Providers }" SelectedItem="{ Binding ProviderSelected }" DisplayMemberPath="Name" />
             </StackPanel>
         </StackPanel>
 

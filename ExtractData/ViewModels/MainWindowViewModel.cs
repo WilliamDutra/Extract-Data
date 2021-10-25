@@ -57,17 +57,25 @@ namespace ExtractData.UI.ViewModels
             set { SetProperty(ref _Tables, value); }
         }
 
-        private string _Provider;
+        private ObservableCollection<Provider> _Providers;
 
-        public string Provider
+        public ObservableCollection<Provider> Providers
+        {
+            get { return _Providers; }
+            set { SetProperty(ref _Providers, value); }
+        }
+
+        private Provider _ProviderSelected;
+
+        public Provider ProviderSelected 
         {
             get 
             { 
-                return _Provider; 
-            }
+                return _ProviderSelected; 
+            } 
             set 
             { 
-                SetProperty(ref _Provider, value); 
+                SetProperty(ref _ProviderSelected, value); 
                 Databases = LoadDatabase(); 
             }
         }
@@ -109,6 +117,7 @@ namespace ExtractData.UI.ViewModels
         {
             _MySql = MySql;
             _SqlServer = SqlServer;
+            Providers = LoadProviders();
             ExtrairCommand = new Command(() => GenerateSQLTextScripts(DatabaseSelected.Database, TableSelected.Table));
         }
 
@@ -187,27 +196,59 @@ namespace ExtractData.UI.ViewModels
 
         private ObservableCollection<ShowDatabase> LoadDatabase()
         {
-            if (Provider.Contains("MYSQL"))
-                return LoadMySqlDatabases();
+            int providerId = ProviderSelected.Id;
 
-            if (Provider.Contains("SQLSERVER"))
-                return LoadSqlServerDatabases();
+            switch (providerId)
+            {
+                case 1:
+                    return LoadMySqlDatabases();
+                    break;
+                case 2:
+                    return LoadSqlServerDatabases();
+                default:
+                    return LoadSqlServerDatabases();
+                    break;
+            }
 
-            return LoadSqlServerDatabases();
         }
-
 
         private ObservableCollection<ShowTable> LoadTables()
         {
-            if (Provider.Contains("MYSQL"))
-                return LoadMySqlTables();
+            int providerId = ProviderSelected.Id;
 
-            if (Provider.Contains("SQLSERVER"))
-                return LoadSqlServerTables();
+            switch (providerId)
+            {
+                case 1:
+                    return LoadMySqlTables();
+                    break;
+                case 2:
+                    return LoadSqlServerTables();
+                    break;
+                default:
+                    return LoadSqlServerTables();
+                    break;
+            }
 
-            return LoadSqlServerTables();
         }
+        
+        private ObservableCollection<Provider> LoadProviders()
+        {
+            var providers = new ObservableCollection<Provider>();
 
+            providers.Add(new Provider
+            {
+                Id = 1,
+                Name = "MYSQL SERVER"
+            });
+
+            providers.Add(new Provider
+            {
+                Id = 2,
+                Name = "SQL SERVER"
+            });
+
+            return providers;
+        }
 
     }
 }
