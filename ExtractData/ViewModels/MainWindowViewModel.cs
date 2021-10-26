@@ -181,7 +181,7 @@ namespace ExtractData.UI.ViewModels
         private void GenerateSQLTextScripts(string Database, string Table)
         {
 
-            if (IsTexto)
+            if (IsTexto && ProviderSelected.Id == 1)
             {
                 var data = _MySql.ShowColumn(Database, Table);
                 var ScriptSQL = _MySql.GenerateScriptsSql(data, Database, Table);
@@ -192,6 +192,7 @@ namespace ExtractData.UI.ViewModels
 
                 MessageBox.Show("Arquivo salvo com sucesso!");
             }
+
         }
 
         private ObservableCollection<ShowDatabase> LoadDatabase()
