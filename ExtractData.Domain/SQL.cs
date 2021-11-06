@@ -144,5 +144,18 @@ namespace ExtractData.Domain
             }
         }
 
+        public IDataReader ExecuteSqlServerCommand(SqlConnection SqlConnection, SqlCommand Command)
+        {
+            try
+            {
+                var retorno = SqlConnection.ExecuteReader(Command.CommandText, commandType: Command.CommandType);
+                return retorno;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
     }
 }

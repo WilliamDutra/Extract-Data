@@ -27,5 +27,7 @@ namespace ExtractData.Domain.Interfaces
 
         public IDataReader ExecuteMySqlServerCommand(MySqlConnection SqlConnection, MySqlCommand Command);
 
+        public IDataReader ExecuteSqlServerCommand(SqlConnection SqlConnection, SqlCommand Command);
+
     }
 }

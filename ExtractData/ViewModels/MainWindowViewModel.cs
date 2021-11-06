@@ -181,10 +181,23 @@ namespace ExtractData.UI.ViewModels
         private void GenerateSQLTextScripts(string Database, string Table)
         {
 
+           
             if (IsTexto && ProviderSelected.Id == 1)
             {
                 var data = _MySql.ShowColumn(Database, Table);
                 var ScriptSQL = _MySql.GenerateScriptsSql(data, Database, Table);
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == true)
+                    File.WriteAllText(saveFileDialog.FileName, ScriptSQL);
+
+                MessageBox.Show("Arquivo salvo com sucesso!");
+            }
+
+            if(IsTexto && ProviderSelected.Id == 2)
+            {
+                var data = _SqlServer.ShowColumn(Database, Table);
+                var ScriptSQL = _SqlServer.GenerateScriptsSql(data, Database, Table);
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 if (saveFileDialog.ShowDialog() == true)

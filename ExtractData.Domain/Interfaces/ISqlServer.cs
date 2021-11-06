@@ -13,5 +13,8 @@ namespace ExtractData.Domain.Interfaces
 
         List<ShowTable> ShowTable(string Database);
 
+        List<ShowColumn> ShowColumn(string Database, string Table);
+
+        public string GenerateScriptsSql(List<ShowColumn> columns, string Database, string Table);
     }
 }
